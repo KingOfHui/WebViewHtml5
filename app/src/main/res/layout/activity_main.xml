@@ -1,15 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:orientation="vertical"
-    android:paddingTop="16dp"
     tools:context="com.lyl.cacheweb.MainActivity">
 
-    <LinearLayout
+    <ImageView
+        android:src="@drawable/update"
+        android:scaleType="fitXY"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <com.daimajia.numberprogressbar.NumberProgressBar
+        android:padding="10dp"
+        android:id="@+id/pb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+
+        custom:progress_unreached_color="#CCCCCC"
+        custom:progress_reached_color="#3498DB"
+
+        custom:progress_unreached_bar_height="0.75dp"
+        custom:progress_reached_bar_height="1.5dp"
+
+        custom:progress_text_size="15sp"
+        custom:progress_text_color="#3498DB"
+        custom:progress_text_offset="1dp"
+        custom:progress_text_visibility="visible"
+
+        custom:progress_max="100"
+        custom:progress_current="0"
+        />
+    <!--<TextView
+        android:id="@+id/tv"
+        android:textColor="@color/colorAccent"
+        android:text="100"
+
+        android:textSize="22sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />-->
+   <!-- <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -55,5 +89,5 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:text="@string/hint"/>
-
-</LinearLayout>
+-->
+</FrameLayout>

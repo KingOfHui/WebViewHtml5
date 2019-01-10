@@ -12,9 +12,11 @@
         android:layout_height="2dp"
         android:progressDrawable="@drawable/po_seekbar"
         android:focusable="false"
-        android:thumb="@null"/>
+        android:thumb="@null"
+        android:visibility="gone"/>
 
     <FrameLayout
+        android:layout_marginTop="0dp"
         android:id="@+id/web_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
