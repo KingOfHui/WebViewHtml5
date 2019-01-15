@@ -1,5 +1,18 @@
 <resources>
-    <string name="app_name">天时健身器材</string>
+    <string name="app_name">农家庄园</string>
 
     <string name="hint">此APP使用提示：\n\n1. 点击前面 “https://” 切换 http ；\n2. 您输入了“http”也可以正常访问；\n3. 在网页中，点击“实体返回键”，返回上一层；\n4. 在网页中，双击“返回键”，返回到最开始进来时的网页；\n5. 在网页中，按“目录键”，弹出“复制网址”和“关闭页面”的选项； </string>
+    <string name="hello">Hello World, JPush!</string>
+    <string name="tag_hint">Tag can be number, alphabet, underscore, Chinese. Use , to split many tags.</string>
+    <string name="alias_hint">Alias can be number, alphabet, underscore, Chinese.</string>
+    <string name="mobilenumber_hint">The phone number can only start with a "+" or a number,other can only contain "-" and Numbers</string>
+    <string name="style_hint">style should be number</string>
+    <string name="error_style_empty">style cannot be empty</string>
+    <string name="error_alias_empty">alias cannot be empty</string>
+    <string name="error_tag_empty">tag cannot be empty</string>
+    <string name="error_tag_gs_empty">Invalid format</string>
+    <string name="mobilenumber_empty_guide">will clear last set phone number</string>
+    <string name="error_network">Failed to init due to network exception.</string>
+    <string name="logining">Running in background. Please see log.</string>
+    <string name="setting_su">Succeed to set</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.lyl.cacheweb;
+package com.film.farmermanor;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,9 +12,7 @@ import android.os.Message;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -56,7 +54,7 @@ public class MainActivity extends Activity {
     }
     public boolean update(final String urlStr) {
         handler = new UpdateHandler();
-        final File file = new File(Environment.getExternalStorageDirectory() + "/" + "tianshijianshen.apk");
+        final File file = new File(Environment.getExternalStorageDirectory() + "/" + "nongfuzhuangyuan.apk");
         new Thread(new Runnable() {
             public void run() {
                 try {
@@ -75,7 +73,6 @@ public class MainActivity extends Activity {
                             outputStream.write(buffer, 0, len);
                             hasRead += len;
                             index = (int) (hasRead * 100) / size;
-                            Log.d("dhdhdh", "" + index);
                             message = new Message();
                             message.what = 1;
                             handler.sendMessage(message);
