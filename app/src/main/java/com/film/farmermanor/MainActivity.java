@@ -12,6 +12,7 @@ import android.os.Message;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,6 +38,26 @@ public class MainActivity extends Activity {
     private TextView tv;
     private NumberProgressBar pb;
 
+    private View view;
+    private Context context;
+    private TextView messageTv;
+    private Button leftBtn;
+    private Button rightBtn;
+    private LinearLayout twoBtnLin;
+    private ProgressBar progressBar;
+    private String downloadUrl;
+    private boolean isMustUpdate;
+    /*是否正在打开安装包*/
+    private boolean isOpenFile = false;
+    private Message message = null;
+    private boolean flag = true;
+    private int size = 1;
+    private int hasRead = 0;
+    private int len = 0;
+    private byte buffer[] = new byte[256];
+    private volatile int index = 0;
+    private UpdateHandler handler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +72,10 @@ public class MainActivity extends Activity {
 //        initViews();
 //        initEvents();
 
+    }
+
+    @Override
+    public void onBackPressed() {
     }
     public boolean update(final String urlStr) {
         handler = new UpdateHandler();
@@ -94,25 +119,6 @@ public class MainActivity extends Activity {
 
         return flag;
     }
-    private View view;
-    private Context context;
-    private TextView messageTv;
-    private Button leftBtn;
-    private Button rightBtn;
-    private LinearLayout twoBtnLin;
-    private ProgressBar progressBar;
-    private String downloadUrl;
-    private boolean isMustUpdate;
-    /*是否正在打开安装包*/
-    private boolean isOpenFile = false;
-    private Message message = null;
-    private boolean flag = true;
-    private int size = 1;
-    private int hasRead = 0;
-    private int len = 0;
-    private byte buffer[] = new byte[256];
-    private volatile int index = 0;
-    private UpdateHandler handler;
 
 
     /**

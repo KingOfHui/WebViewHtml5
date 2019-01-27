@@ -8,8 +8,8 @@ android {
         applicationId "com.film.farmermanor"
         minSdkVersion 21
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionCode 11
+        versionName "1.1"
 
         ndk {
             //选择要添加的对应cpu类型的.so库。

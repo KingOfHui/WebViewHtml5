@@ -10,6 +10,8 @@ import android.support.annotation.NonNull;
 import android.os.Bundle;
 import android.view.Window;
 
+import java.io.IOException;
+
 
 public class LoadingActivity extends Activity {
 
@@ -17,12 +19,18 @@ public class LoadingActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
+        try {
+            Intent intentForPackage = this.getPackageManager().getLaunchIntentForPackage("com.bxvip.app.dadazy");
+            startActivity(intentForPackage);
+            finish();
+        } catch (Exception e) {
 
         setContentView(R.layout.activity_loading);
         //检查权限
         boolean grantExternalRW = isGrantExternalRW(this);
         if (grantExternalRW) {
             enterApp();
+        }
         }
     }
     public static boolean isGrantExternalRW(Activity activity){
@@ -42,6 +50,13 @@ public class LoadingActivity extends Activity {
             case 1:
                 if(grantResults.length >0 &&grantResults[0]==PackageManager.PERMISSION_GRANTED){
                     //用户同意授权
+//                    try {
+//                        Intent intentForPackage = this.getPackageManager().getLaunchIntentForPackage("com.bxvip.app.dadazy");
+//                        startActivity(intentForPackage);
+//                        finish();
+//                    } catch (Exception e) {
+//                        enterApp();
+//                    }
                     enterApp();
                 }else{
                     //用户拒绝授权

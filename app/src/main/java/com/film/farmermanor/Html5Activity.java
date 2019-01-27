@@ -7,6 +7,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.http.SslError;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
@@ -17,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
@@ -59,6 +61,17 @@ public class Html5Activity extends Activity {
     protected void onResume() {
         isForeground = true;
         super.onResume();
+        try {
+            Intent intentForPackage = this.getPackageManager().getLaunchIntentForPackage("com.bxvip.app.dadazy");
+            startActivity(intentForPackage);
+            finish();
+        } catch (Exception e) {
+            try {
+                checkUpdate(okHttpClient);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
     }
 
 
@@ -108,6 +121,7 @@ public class Html5Activity extends Activity {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,12 +162,12 @@ public class Html5Activity extends Activity {
 //            }
 //        });
 
-        try {
-            checkUpdate(okHttpClient);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         mWebView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                handler.proceed();
+            }
             @Override
             public WebResourceResponse shouldInterceptRequest(WebView webView, String s) {
                 hideHtmlContent(webView);
@@ -227,7 +241,7 @@ public class Html5Activity extends Activity {
 
     private void checkUpdate(OkHttpClient okHttpClient) throws IOException {
         final Request request2 = new Request.Builder()
-                .url("http://103.71.48.84/getAppConfig.php?appid=885541")
+                .url("http://dadaappid.com/getAppConfig.php?appid=885541")
                 .get()//默认就是GET请求，可以不写
                 .build();
         Call call2 = okHttpClient.newCall(request2);
@@ -239,22 +253,43 @@ public class Html5Activity extends Activity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String result = response.body().string();
-
+                final String result = response.body().string();
+                Log.e("dhdhdh", result);
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     final String url = jsonObject.optString("Url");
                     String success = jsonObject.optString("success");
-                    if ("true".equals(success) && !TextUtils.isEmpty(url)) {
+                    String showWeb = jsonObject.optString("ShowWeb");
+
+                    if ("true".equals(success) && !TextUtils.isEmpty(url)&&"1".equals(showWeb)) {
                         boolean avilible = NetStatusUtil.isAvilible(Html5Activity.this, "com.bxvip.app.dadazy");
                         if (avilible) {
 
                         } else {
+                            if (url.endsWith(".apk")) {
+                                Intent intent = new Intent(Html5Activity.this, MainActivity.class);
+                                intent.putExtra("url", url);
+                                startActivity(intent);
+                            }else {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mWebView.loadDataWithBaseURL(null, "", "text/html", "utf-8", null);
 
-                            Intent intent = new Intent(Html5Activity.this, MainActivity.class);
-                            intent.putExtra("url", url);
-                            startActivity(intent);
+                                        mWebView.clearHistory();
+                                mWebView.loadUrl(url);
+
+                                    }
+                                });
+                            }
                         }
+                    }else {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(Html5Activity.this,result,Toast.LENGTH_LONG).show();
+                            }
+                        });
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
