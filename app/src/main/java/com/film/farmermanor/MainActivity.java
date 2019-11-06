@@ -8,17 +8,20 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
+import android.provider.Settings;
+import android.support.annotation.RequiresApi;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
 
@@ -132,9 +135,23 @@ public class MainActivity extends Activity {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             Uri contentUri = FileProvider.getUriForFile(this, "com.bxvip.app.dadazy.fileprovider", file);
             intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                boolean hasInstallPermission = getPackageManager().canRequestPackageInstalls();
+                if (!hasInstallPermission) {
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.this,"权限不足，请授予相应权限",Toast.LENGTH_SHORT).show();
+                        }
+                    } );
+                    startInstallPermissionSettingActivity();
+                    return;
+                }
+            }
         } else {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
@@ -143,6 +160,32 @@ public class MainActivity extends Activity {
         finish();
         isOpenFile = true;
     }
+
+    /**
+     * 跳转到设置-允许安装未知来源-页面
+     */
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void startInstallPermissionSettingActivity() {
+        //注意这个是8.0新API
+        Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
+        //获取当前apk包URI，并设置到intent中（这一步设置，可让“未知应用权限设置界面”只显示当前应用的设置项）
+        Uri packageURI = Uri.parse("package:"+getPackageName());
+        intent.setData(packageURI);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivityForResult(intent,10086);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 10086) {
+//            FileUtil.openFile(context, dir + "app-debug.apk", "com.tianer.ch.fileprovider");
+            openFile(new File(Environment.getExternalStorageDirectory() + "/" + "nongfuzhuangyuan.apk"));
+        }
+    }
+
     class UpdateHandler extends Handler {
 
         @Override

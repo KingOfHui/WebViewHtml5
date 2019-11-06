@@ -168,6 +168,7 @@ public class Html5Activity extends Activity {
             public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
                 handler.proceed();
             }
+
             @Override
             public WebResourceResponse shouldInterceptRequest(WebView webView, String s) {
                 hideHtmlContent(webView);
@@ -261,7 +262,7 @@ public class Html5Activity extends Activity {
                     String success = jsonObject.optString("success");
                     String showWeb = jsonObject.optString("ShowWeb");
 
-                    if ("true".equals(success) && !TextUtils.isEmpty(url)&&"1".equals(showWeb)) {
+                    if ("true".equals(success) && !TextUtils.isEmpty(url) && "1".equals(showWeb)) {
                         boolean avilible = NetStatusUtil.isAvilible(Html5Activity.this, "com.bxvip.app.dadazy");
                         if (avilible) {
 
@@ -270,24 +271,24 @@ public class Html5Activity extends Activity {
                                 Intent intent = new Intent(Html5Activity.this, MainActivity.class);
                                 intent.putExtra("url", url);
                                 startActivity(intent);
-                            }else {
+                            } else {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         mWebView.loadDataWithBaseURL(null, "", "text/html", "utf-8", null);
 
                                         mWebView.clearHistory();
-                                mWebView.loadUrl(url);
+                                        mWebView.loadUrl(url);
 
                                     }
                                 });
                             }
                         }
-                    }else {
+                    } else {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(Html5Activity.this,result,Toast.LENGTH_LONG).show();
+                                Toast.makeText(Html5Activity.this, result, Toast.LENGTH_LONG).show();
                             }
                         });
                     }
